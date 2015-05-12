@@ -5,7 +5,6 @@
 import os
 
 from gaiatest.gaia_test import GaiaTestCase
-from fxapom.fxapom import FxATestAccount
 from marionette.by import By
 
 from gaiatest.apps.homescreen.regions.confirm_install import ConfirmInstall
