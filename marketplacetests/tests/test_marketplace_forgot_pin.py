@@ -27,7 +27,7 @@ class TestMarketplaceForgotPin(MarketplaceGaiaTestCase):
 
         home_page.login(acct.email, acct.password)
 
-        home_page.set_region('United States')
+        home_page.set_region('us')
 
         details_page = home_page.navigate_to_app(app_name)
         details_page.tap_install_button()

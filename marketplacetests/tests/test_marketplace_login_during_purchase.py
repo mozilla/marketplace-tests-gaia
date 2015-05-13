@@ -24,7 +24,7 @@ class TestMarketplaceLoginDuringPurchase(MarketplaceGaiaTestCase):
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
-        home_page.set_region('United States')
+        home_page.set_region('us')
 
         details_page = home_page.navigate_to_app(app_name)
         details_page.tap_install_button()
