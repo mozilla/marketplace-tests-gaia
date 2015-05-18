@@ -38,7 +38,7 @@ class TestSearchMarketplaceAndInstallApp(MarketplaceGaiaTestCase):
         self.assertEquals(first_result.author, app_author, 'First app has the wrong author.')
 
         # Find and click the install button to the install the web app
-        self.assertEquals(first_result.install_button_text, 'Free', 'Incorrect button label.')
+        self.assertEquals(first_result.install_button_text, 'Install for free', 'Incorrect button label.')
 
         first_result.tap_install_button()
         self.wait_for_downloads_to_finish()

@@ -15,7 +15,7 @@ class Details(BasePage):
     _app_info_locator = (By.CSS_SELECTOR, '.detail .info')
     _first_review_locator = (By.CSS_SELECTOR, '.reviews-wrapper li:first-child')
     _first_review_body_locator = (By.CSS_SELECTOR, '.reviews-wrapper .review-body')
-    _install_button_locator = (By.CSS_SELECTOR, '.detail .info button.product.install')
+    _install_button_locator = (By.CSS_SELECTOR, '.detail .info button.mkt-app-button.install')
 
     @property
     def is_app_details_displayed(self):
