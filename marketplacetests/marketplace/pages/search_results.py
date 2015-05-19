@@ -26,7 +26,7 @@ class Result(PageRegion):
 
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
     _author_locator = (By.CSS_SELECTOR, '.info .author')
-    _install_button_locator = (By.CSS_SELECTOR, '.button.product.install')
+    _install_button_locator = (By.CSS_SELECTOR, '.button.mkt-app-button.install')
 
     @property
     def name(self):

@@ -45,7 +45,7 @@ class TestMarketplacePurchaseApp(MarketplaceGaiaTestCase):
 
         self.assertEqual('%s installed' % self.app_name, details_page.install_notification_message)
         marketplace.switch_to_marketplace_frame()
-        self.assertEqual('Open', details_page.install_button_text)
+        self.assertEqual('Open app', details_page.install_button_text)
 
     def tearDown(self):
         self.apps.uninstall(self.app_name)
