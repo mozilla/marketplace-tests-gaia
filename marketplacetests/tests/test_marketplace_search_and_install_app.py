@@ -17,10 +17,8 @@ class TestSearchMarketplaceAndInstallApp(MarketplaceGaiaTestCase):
         home_page = marketplace.launch()
 
         # Find a free app to install
-        results = home_page.search(':free').search_results
-        app = results[0]
-        self.app_name = app.name
-        app_author = app.author
+        app = home_page.first_free_app
+        self.app_name = app['name']
 
         if self.apps.is_app_installed(self.app_name):
             raise Exception('The app %s is already installed.' % self.app_name)
@@ -35,7 +33,9 @@ class TestSearchMarketplaceAndInstallApp(MarketplaceGaiaTestCase):
         first_result = results[0]
 
         self.assertEquals(first_result.name, self.app_name, 'First app has the wrong name.')
-        self.assertEquals(first_result.author, app_author, 'First app has the wrong author.')
+        self.assertEquals(first_result.author, app['author'],
+                          'First app has the wrong author. Found %s but expected %s.' %
+                          (first_result.author, app['author']))
 
         # Find and click the install button to the install the web app
         self.assertEquals(first_result.install_button_text, 'Install for free', 'Incorrect button label.')

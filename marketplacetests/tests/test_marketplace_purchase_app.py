@@ -12,25 +12,16 @@ from marketplacetests.payment.app import Payment
 
 class TestMarketplacePurchaseApp(MarketplaceGaiaTestCase):
 
-    app_name = 'Test Zippy With Me'
-
     def test_purchase_app(self):
 
         pin = '1234'
         acct = FxATestAccount(base_url=self.base_url).create_account()
 
-        if self.apps.is_app_installed(self.app_name):
-            raise Exception('The app %s is already installed.' % self.app_name)
-
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
         home_page.login(acct.email, acct.password)
-
-        home_page.set_region('us')
-
-        details_page = home_page.navigate_to_app(self.app_name)
-        details_page.tap_install_button()
+        search_results_page = self.tap_install_button_of_first_paid_app()
 
         payment = Payment(self.marionette)
         payment.create_pin(pin)
@@ -43,9 +34,12 @@ class TestMarketplacePurchaseApp(MarketplaceGaiaTestCase):
         confirm_install = ConfirmInstall(self.marionette)
         confirm_install.tap_confirm()
 
-        self.assertEqual('%s installed' % self.app_name, details_page.install_notification_message)
+        self.assertEqual('%s installed' % self.app_name, search_results_page.install_notification_message)
         marketplace.switch_to_marketplace_frame()
-        self.assertEqual('Open app', details_page.install_button_text)
+
+        app = search_results_page.search_results[0]
+
+        self.assertEqual('Open app', app.install_button_text)
 
     def tearDown(self):
         self.apps.uninstall(self.app_name)

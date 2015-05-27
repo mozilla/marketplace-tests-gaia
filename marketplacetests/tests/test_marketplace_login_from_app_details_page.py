@@ -20,7 +20,8 @@ class TestMarketplaceLoginFromAppDetailsPage(MarketplaceGaiaTestCase):
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
-        app_name = home_page.first_free_app_name
+        app_name = home_page.first_free_app['name']
+
         details_page = home_page.navigate_to_app(app_name)
 
         ff_accounts = details_page.tap_write_review(logged_in=False)

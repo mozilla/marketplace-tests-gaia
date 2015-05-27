@@ -11,7 +11,8 @@ from marketplacetests.marketplace.app import Marketplace
 class BasePage(Marketplace):
 
     _body_loaded_locator = (By.CSS_SELECTOR, 'body.loaded')
-    _back_button_locator = (By.CSS_SELECTOR, '#site-header a.header-button.back')
+    # This allows us to instantiate a base page object no matter which page we are currently on
+    _page_loaded_locator = (By.CSS_SELECTOR, 'body.loaded')
     _nav_menu_toggle_locator = (By.CSS_SELECTOR, 'mkt-nav-toggle button')
     _home_button_locator = (By.CSS_SELECTOR, 'h1.site a')
     _notification_locator = (By.ID, 'notification-content')
@@ -36,11 +37,12 @@ class BasePage(Marketplace):
         self.wait_for_login_success_notification()
 
     @property
-    def first_free_app_name(self):
+    def first_free_app(self):
         free_apps = self.search(':free').search_results
-        name = free_apps[0].name
-        self.tap_back()
-        return name
+        app = free_apps[0]
+        app_dict = {'name': app.name, 'author': app.author}
+        self.tap_home()
+        return app_dict
 
     def wait_for_notification_message(self, message):
         """This will wait for the specified message to appear in the DOM element
@@ -113,14 +115,6 @@ class BasePage(Marketplace):
         # app not found
         raise Exception('The app: %s was not found.' % app_name)
 
-    def tap_back(self):
-        back_button = self.marionette.find_element(*self._back_button_locator)
-        # This workaround is required for gaia v2.0, but can be removed in later versions
-        # as the bug has been fixed
-        # Bug 937053 - tap() method should calculate elementInView from the coordinates of the tap
-        self.marionette.execute_script('arguments[0].scrollIntoView(false);', [back_button])
-        back_button.tap()
-
     def tap_home(self):
         self.marionette.find_element(*self._home_button_locator).tap()
 
@@ -136,6 +130,18 @@ class BasePage(Marketplace):
         Wait(self.marionette).until(
             lambda m: 'mkt-nav--visible' in body.get_attribute('class'))
         return NavMenu(self.marionette)
+
+    def search_for_paid_apps(self):
+        self.set_region('us')
+        return self.search(':paid')
+
+    def is_app_installed(self, name):
+        installed = self.apps.is_app_installed(name)
+        self.switch_to_marketplace_frame()
+        return installed
+
+    def wait_for_payment_cancelled_notification(self):
+        self.wait_for_notification_message('Payment cancelled.')
 
 
 class NavMenu(Marketplace):

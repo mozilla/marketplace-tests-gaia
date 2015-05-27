@@ -4,12 +4,13 @@
 
 import os
 
+from gaiatest.apps.homescreen.regions.confirm_install import ConfirmInstall
+from gaiatest.apps.homescreen.app import Homescreen
 from gaiatest.gaia_test import GaiaTestCase
 from marionette.by import By
 
-from gaiatest.apps.homescreen.regions.confirm_install import ConfirmInstall
-from gaiatest.apps.homescreen.app import Homescreen
 from marketplacetests.marketplace.app import Marketplace
+from marketplacetests.marketplace.pages.base import BasePage
 
 
 class MarketplaceGaiaTestCase(GaiaTestCase):
@@ -76,3 +77,18 @@ class MarketplaceGaiaTestCase(GaiaTestCase):
     def wait_for_downloads_to_finish(self):
         self.marionette.switch_to_frame()
         self.wait_for_element_not_displayed(*self._statusbar_downloads_icon_locator)
+
+    def tap_install_button_of_first_paid_app(self):
+        """This method taps on the install button of the first paid app and stores the name of that app in self.app_name for future use by the test.
+
+        It also verifies that the targeted app is not already installed
+        and returns the SearchResults page object to the caller.
+        """
+        page = BasePage(self.marionette)
+        search_results_page = page.search_for_paid_apps()
+        # The first paid app's app object is search_results_page.search_results[0]
+        self.app_name = search_results_page.search_results[0].name
+        self.assertFalse(page.is_app_installed(self.app_name))
+        # We need to re-find the app object as the call to is_app_installed loses context
+        search_results_page.search_results[0].tap_install_button()
+        return search_results_page
