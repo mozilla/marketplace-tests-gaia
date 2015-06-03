@@ -10,25 +10,13 @@ class TestSearchMarketplacePaidApp(MarketplaceGaiaTestCase):
 
     def test_search_paid_app(self):
 
-        app_name = 'Test Zippy With Me'
-        if self.apps.is_app_installed(app_name):
-            raise Exception('The app %s is already installed.' % app_name)
-
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
         home_page.set_region('us')
 
-        search_results = home_page.search(app_name).search_results
+        app = home_page.search(':paid').search_results[0]
 
-        self.assertGreater(len(search_results), 0, 'No results found.')
-
-        for result in search_results:
-            if result.name == app_name:
-                saved_price = result.install_button_text
-                details_page = result.tap_app()
-                self.assertEqual(saved_price, details_page.install_button_text)
-                return True
-
-        # app not found
-        self.fail('The app: %s was not found.' % app_name)
+        saved_price = app.install_button_text
+        details_page = app.tap_app()
+        self.assertEqual(saved_price, details_page.install_button_text)

@@ -13,24 +13,16 @@ class TestMarketplaceCreateConfirmPin(MarketplaceGaiaTestCase):
 
     def test_create_confirm_pin(self):
 
-        app_name = 'Test Zippy With Me'
         pin = '1234'
         acct = FxATestAccount(base_url=self.base_url).create_account()
-
-        if self.apps.is_app_installed(app_name):
-            raise Exception('The app %s is already installed.' % app_name)
 
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
         home_page.login(acct.email, acct.password)
-
-        home_page.set_region('us')
-
-        details_page = home_page.navigate_to_app(app_name)
-        details_page.tap_install_button()
+        self.tap_install_button_of_first_paid_app()
 
         payment = Payment(self.marionette)
         payment.create_pin(pin)
         payment.wait_for_buy_app_section_displayed()
-        self.assertIn(app_name, payment.app_name)
+        self.assertIn(self.app_name, payment.app_name)

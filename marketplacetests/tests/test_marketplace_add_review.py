@@ -19,7 +19,7 @@ class TestMarketplaceAddReview(MarketplaceGaiaTestCase):
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
-        app_name = home_page.first_free_app_name
+        app_name = home_page.first_free_app['name']
 
         home_page.login(acct.email, acct.password)
         details_page = home_page.navigate_to_app(app_name)

@@ -14,32 +14,25 @@ class TestMarketplaceForgotPin(MarketplaceGaiaTestCase):
 
     def test_forgot_pin(self):
 
-        app_name = 'Test Zippy With Me'
         old_pin = '1234'
         new_pin = '1111'
         acct = FxATestAccount(base_url=self.base_url).create_account()
-
-        if self.apps.is_app_installed(app_name):
-            raise Exception('The app %s is already installed.' % app_name)
 
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
         home_page.login(acct.email, acct.password)
-
-        home_page.set_region('us')
-
-        details_page = home_page.navigate_to_app(app_name)
-        details_page.tap_install_button()
+        search_results_page = self.tap_install_button_of_first_paid_app()
 
         payment = Payment(self.marionette)
         payment.create_pin(old_pin)
         payment.wait_for_buy_app_section_displayed()
-        self.assertIn(app_name, payment.app_name)
+        self.assertIn(self.app_name, payment.app_name)
         payment.tap_cancel_button()
 
-        details_page.wait_for_payment_cancelled_notification()
-        details_page.tap_install_button()
+        search_results_page.wait_for_payment_cancelled_notification()
+        search_results_page.search_results[0].tap_install_button()
+
         payment.switch_to_payment_frame()
         payment.tap_forgot_pin()
         payment.tap_reset_button()
@@ -52,4 +45,4 @@ class TestMarketplaceForgotPin(MarketplaceGaiaTestCase):
         payment.confirm_pin(new_pin)
 
         payment.wait_for_buy_app_section_displayed()
-        self.assertIn(app_name, payment.app_name)
+        self.assertIn(self.app_name, payment.app_name)
