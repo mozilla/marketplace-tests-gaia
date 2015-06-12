@@ -9,7 +9,7 @@ except (OSError, IOError):
     description = ''
 
 dependencies = ['gaiatest-v2.0',
-                'fxapom']
+                'fxapom==1.2']
 
 setup(name='marketplacetests',
       version='1.0',
