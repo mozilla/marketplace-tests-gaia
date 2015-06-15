@@ -13,7 +13,7 @@ class TestSearchMarketplacePaidApp(MarketplaceGaiaTestCase):
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
-        home_page.set_region('us')
+        home_page.set_region('United States')
 
         app = home_page.search(':paid').search_results[0]
 

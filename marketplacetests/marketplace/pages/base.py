@@ -132,7 +132,7 @@ class BasePage(Marketplace):
         return NavMenu(self.marionette)
 
     def search_for_paid_apps(self):
-        self.set_region('us')
+        self.set_region('United States')
         return self.search(':paid')
 
     def is_app_installed(self, name):
