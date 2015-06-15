@@ -18,7 +18,7 @@ class TestMarketplaceLoginDuringPurchase(MarketplaceGaiaTestCase):
         acct = FxATestAccount(base_url=self.base_url).create_account()
 
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
-        home_page = marketplace.launch()
+        marketplace.launch()
 
         self.tap_install_button_of_first_paid_app()
 
