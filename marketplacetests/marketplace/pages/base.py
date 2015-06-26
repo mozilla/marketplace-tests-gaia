@@ -39,10 +39,15 @@ class BasePage(Marketplace):
     @property
     def first_free_app(self):
         free_apps = self.search(':free').search_results
-        app = free_apps[0]
-        app_dict = {'name': app.name, 'author': app.author}
-        self.tap_home()
-        return app_dict
+        for app in free_apps:
+            # TODO: This is a hack added to address Bug 1177852
+            # https://bugzilla.mozilla.org/show_bug.cgi?id=1177852
+            # It should be removed when that bug is fixed
+            if self.is_ascii(app.name):
+                app_dict = {'name': app.name, 'author': app.author}
+                self.tap_home()
+                return app_dict
+        raise Exception('No app with an ascii name was found')
 
     def wait_for_notification_message(self, message):
         """This will wait for the specified message to appear in the DOM element
@@ -142,6 +147,12 @@ class BasePage(Marketplace):
 
     def wait_for_payment_cancelled_notification(self):
         self.wait_for_notification_message('Payment cancelled.')
+
+    # TODO: This is to support the hack added to address Bug 1177852
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1177852
+    # It should be removed when that bug is fixed
+    def is_ascii(self, value):
+        return all(ord(c) < 128 for c in value)
 
 
 class NavMenu(Marketplace):
