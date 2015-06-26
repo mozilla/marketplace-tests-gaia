@@ -147,15 +147,9 @@ class BasePage(Marketplace):
 class NavMenu(Marketplace):
 
     _feedback_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="feedback"]')
+    _new_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="new"]')
     _settings_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="settings"]')
     _sign_in_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link.persona:not(.register)')
-
-    def tap_settings(self):
-        settings_item = self.marionette.find_element(*self._settings_menu_item_locator)
-        Wait(self.marionette).until(expected.element_displayed(settings_item))
-        settings_item.tap()
-        from marketplacetests.marketplace.pages.settings import Settings
-        return Settings(self.marionette)
 
     def tap_feedback(self):
         feedback_item = self.marionette.find_element(*self._feedback_menu_item_locator)
@@ -163,6 +157,20 @@ class NavMenu(Marketplace):
         feedback_item.tap()
         from marketplacetests.marketplace.pages.feedback import Feedback
         return Feedback(self.marionette)
+
+    def tap_new(self):
+        new_item = self.marionette.find_element(*self._new_menu_item_locator)
+        Wait(self.marionette).until(expected.element_displayed(new_item))
+        new_item.tap()
+        from marketplacetests.marketplace.pages.new import NewAppsPage
+        return NewAppsPage(self.marionette)
+
+    def tap_settings(self):
+        settings_item = self.marionette.find_element(*self._settings_menu_item_locator)
+        Wait(self.marionette).until(expected.element_displayed(settings_item))
+        settings_item.tap()
+        from marketplacetests.marketplace.pages.settings import Settings
+        return Settings(self.marionette)
 
     def tap_sign_in(self):
         sign_in_item = self.marionette.find_element(*self._sign_in_menu_item_locator)
