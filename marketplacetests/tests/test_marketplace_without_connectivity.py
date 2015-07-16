@@ -8,7 +8,7 @@ from marketplacetests.marketplace.app import Marketplace
 
 class TestMarketplaceWithoutConnectivity(MarketplaceGaiaTestCase):
 
-    offline_error_message = u'Sorry, you are currently offline. Please try again later.'
+    offline_error_message = u'Sorry, you need to be online to access the Marketplace.'
 
     def setUp(self):
         MarketplaceGaiaTestCase.setUp(self)

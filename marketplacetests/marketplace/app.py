@@ -13,7 +13,7 @@ class Marketplace(Base):
 
     _marketplace_frame_locator = (By.CSS_SELECTOR, 'iframe[src*="marketplace"]')
     _loading_fragment_locator = (By.CSS_SELECTOR, 'div.loading-fragment')
-    _offline_message_locator = (By.CSS_SELECTOR, 'div.error-message[data-l10n="offline"]')
+    _offline_message_locator = (By.CSS_SELECTOR, 'div.error-message[data-l10n="offline-error-message"]')
 
     def __init__(self, marionette, app_name=False):
         Base.__init__(self, marionette)
