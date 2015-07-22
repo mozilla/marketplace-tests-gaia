@@ -3,7 +3,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import os
+from urlparse import urlparse
 
+from fxapom.fxapom import DEV_URL, FxATestAccount, PROD_URL
 from gaiatest.apps.homescreen.regions.confirm_install import ConfirmInstall
 from gaiatest.apps.homescreen.app import Homescreen
 from gaiatest.gaia_test import GaiaTestCase
@@ -29,6 +31,11 @@ class MarketplaceGaiaTestCase(GaiaTestCase):
         # This is used to tell FxA whether to create a dev or prod account
         self.base_url = 'https://marketplace-dev.allizom.org'
 
+    def create_firefox_account(self):
+        prod_hosts = ['marketplace.firefox.com', 'marketplace.allizom.org']
+        api_url = PROD_URL if urlparse(self.base_url).hostname in prod_hosts else DEV_URL
+        return FxATestAccount(api_url)
+
     def install_in_app_payments_test_app(self, app_name):
 
         homescreen = Homescreen(self.marionette)
@@ -51,14 +58,6 @@ class MarketplaceGaiaTestCase(GaiaTestCase):
         self.apps.switch_to_displayed_app()
         homescreen.wait_for_app_icon_present(app_name)
         return homescreen
-
-    @property
-    def email(self):
-        return self.acct.email
-
-    @property
-    def password(self):
-        return self.acct.password
 
     def install_certs(self):
         """ Install the marketplace-dev certs and set the pref required """

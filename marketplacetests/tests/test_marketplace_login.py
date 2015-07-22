@@ -1,7 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-from fxapom.fxapom import FxATestAccount
 
 from marketplacetests.marketplace_gaia_test import MarketplaceGaiaTestCase
 from marketplacetests.marketplace.app import Marketplace
@@ -14,9 +13,9 @@ class TestMarketplaceLogin(MarketplaceGaiaTestCase):
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
-        acct = FxATestAccount(base_url=self.base_url).create_account()
+        account = self.create_firefox_account()
 
-        home_page.login(acct.email, acct.password)
+        home_page.login(account.email, account.password)
 
         # switch back to Marketplace
         marketplace.switch_to_marketplace_frame()
@@ -27,7 +26,7 @@ class TestMarketplaceLogin(MarketplaceGaiaTestCase):
         settings.wait_for_sign_out_button()
 
         # Verify that user is logged in
-        self.assertEqual(acct.email, settings.email)
+        self.assertEqual(account.email, settings.email)
 
         # Sign out, which should return to the Marketplace home screen
         settings.tap_sign_out()

@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from fxapom.fxapom import FxATestAccount
 from marionette import Wait
 
 from marketplacetests.in_app_payments.in_app import InAppPaymentTester
@@ -20,7 +19,7 @@ class TestMakeInAppPayment(MarketplaceGaiaTestCase):
 
     def test_make_an_in_app_payment(self):
 
-        acct = FxATestAccount(base_url=self.base_url).create_account()
+        account = self.create_firefox_account()
         homescreen = self.install_in_app_payments_test_app(self.test_data['app_name'])
 
         # Verify that the app icon is visible on one of the homescreen pages
@@ -33,7 +32,7 @@ class TestMakeInAppPayment(MarketplaceGaiaTestCase):
         Wait(self.marionette).until(lambda m: m.title == self.test_data['app_title'])
 
         fxa = self.tester_app.tap_buy_product(self.test_data['product'])
-        fxa.login(acct.email, acct.password)
+        fxa.login(account.email, account.password)
 
         payment = InAppPayment(self.marionette)
         payment.create_pin(self.test_data['pin'])

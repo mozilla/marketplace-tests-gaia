@@ -2,8 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from fxapom.fxapom import FxATestAccount
-
 from marketplacetests.firefox_accounts.app import FirefoxAccounts
 from marketplacetests.marketplace_gaia_test import MarketplaceGaiaTestCase
 from marketplacetests.marketplace.app import Marketplace
@@ -16,12 +14,12 @@ class TestMarketplaceForgotPin(MarketplaceGaiaTestCase):
 
         old_pin = '1234'
         new_pin = '1111'
-        acct = FxATestAccount(base_url=self.base_url).create_account()
+        account = self.create_firefox_account()
 
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
-        home_page.login(acct.email, acct.password)
+        home_page.login(account.email, account.password)
         search_results_page = self.tap_install_button_of_first_paid_app()
 
         payment = Payment(self.marionette)
@@ -38,7 +36,7 @@ class TestMarketplaceForgotPin(MarketplaceGaiaTestCase):
         payment.tap_reset_button()
 
         ff_accounts = FirefoxAccounts(self.marionette)
-        ff_accounts.login(acct.email, acct.password)
+        ff_accounts.login(account.email, account.password)
 
         payment.switch_to_payment_frame()
         payment.enter_pin(new_pin)

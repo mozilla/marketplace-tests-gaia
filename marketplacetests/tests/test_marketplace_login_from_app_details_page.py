@@ -5,8 +5,6 @@
 import time
 import random
 
-from fxapom.fxapom import FxATestAccount
-
 from marketplacetests.marketplace.pages.add_review import AddReview
 from marketplacetests.marketplace_gaia_test import MarketplaceGaiaTestCase
 from marketplacetests.marketplace.app import Marketplace
@@ -15,7 +13,7 @@ from marketplacetests.marketplace.app import Marketplace
 class TestMarketplaceLoginFromAppDetailsPage(MarketplaceGaiaTestCase):
 
     def test_marketplace_login_from_app_details_page(self):
-        acct = FxATestAccount(base_url=self.base_url).create_account()
+        account = self.create_firefox_account()
 
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
@@ -25,7 +23,7 @@ class TestMarketplaceLoginFromAppDetailsPage(MarketplaceGaiaTestCase):
         details_page = home_page.navigate_to_app(app_name)
 
         ff_accounts = details_page.tap_write_review(logged_in=False)
-        ff_accounts.login(acct.email, acct.password)
+        ff_accounts.login(account.email, account.password)
 
         # switch back to Marketplace
         marketplace.switch_to_marketplace_frame()

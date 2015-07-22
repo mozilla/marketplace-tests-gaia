@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from fxapom.fxapom import FxATestAccount
 from gaiatest.apps.homescreen.regions.confirm_install import ConfirmInstall
 
 from marketplacetests.marketplace_gaia_test import MarketplaceGaiaTestCase
@@ -15,12 +14,12 @@ class TestMarketplacePurchaseApp(MarketplaceGaiaTestCase):
     def test_purchase_app(self):
 
         pin = '1234'
-        acct = FxATestAccount(base_url=self.base_url).create_account()
+        account = self.create_firefox_account()
 
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         home_page = marketplace.launch()
 
-        home_page.login(acct.email, acct.password)
+        home_page.login(account.email, account.password)
         search_results_page = self.tap_install_button_of_first_paid_app()
 
         payment = Payment(self.marionette)

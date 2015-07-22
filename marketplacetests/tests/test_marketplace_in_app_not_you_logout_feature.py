@@ -3,7 +3,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from marionette import Wait
-from fxapom.fxapom import FxATestAccount
 
 from marketplacetests.payment.app import InAppPayment
 from marketplacetests.in_app_payments.in_app import InAppPaymentTester
@@ -19,7 +18,7 @@ class TestNotYouLogoutFromInAppPayment(MarketplaceGaiaTestCase):
 
     def test_not_you_logout_from_in_app_payment(self):
 
-        acct = FxATestAccount(base_url=self.base_url).create_account()
+        account = self.create_firefox_account()
         homescreen = self.install_in_app_payments_test_app(self.test_data['app_name'])
 
         # Verify that the app icon is visible on one of the homescreen pages
@@ -32,14 +31,14 @@ class TestNotYouLogoutFromInAppPayment(MarketplaceGaiaTestCase):
         Wait(self.marionette).until(lambda m: m.title == self.test_data['app_title'])
 
         fxa = self.tester_app.tap_buy_product(self.test_data['product'])
-        fxa.login(acct.email, acct.password)
+        fxa.login(account.email, account.password)
 
         payment = InAppPayment(self.marionette)
         payment.tap_cancel_pin()
 
         fxa = self.tester_app.tap_buy_product(self.test_data['product'])
         self.assertTrue(fxa.is_not_you_logout_link_visible)
-        self.assertEqual('You are signed in as: %s' % acct.email, 'You are signed in as: %s' % fxa.email_text)
+        self.assertEqual('You are signed in as: %s' % account.email, 'You are signed in as: %s' % fxa.email_text)
 
         fxa.tap_not_you()
         fxa.wait_for_password_field_visible()
